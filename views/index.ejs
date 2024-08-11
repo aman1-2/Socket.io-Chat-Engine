@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHAT APP ENGINE</title>
+</head>
+<body>
+    <h1 align="center"> <u>Web Chat App</u> </h1>
+
+    <div>
+        <button id="start_chat" data-roomid="<%= id %>">Start Chat</button>
+        <input type="text" id="user" placeholder="User Name...">
+        <input type="text" id="msg" placeholder="Write Message...">
+        <button id="send_msg">Send</button>
+    </div>
+
+    <div>
+        <ul id="msg_list">
+
+        </ul>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+
+        const msgList = document.getElementById("msg_list");
+        const msg = document.getElementById("msg");
+        const btn = document.getElementById("send_msg");
+        const user = document.getElementById("user");
+        const startChat = document.getElementById("start_chat");
+        
+        startChat.onclick = function joinRoom() {
+            socket.emit("join_room", {
+                roomid: startChat.getAttribute("data-roomid")
+            });
+        }
+
+        btn.onclick = function generateMessage() {
+            socket.emit("Send_Msg", {
+                user: user.value,
+                msg: msg.value,
+                roomid: startChat.getAttribute("data-roomid")
+            });
+        }
+
+        socket.on("Rcvd_Msg",(data) => {
+            let li = document.createElement('li');
+            li.innerText = `${data.user}: ${data.msg}`;
+            msgList.appendChild(li);
+        });
+    </script>
+</body>
+</html> 
