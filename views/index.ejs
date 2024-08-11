@@ -9,7 +9,7 @@
     <h1 align="center"> <u>Web Chat App</u> </h1>
 
     <div>
-        <button id="start_chat" data-roomid="<%= id %>">Start Chat</button>
+        <input type="hidden" id="start_chat" data-roomid="<%= id %>"></input>
         <input type="text" id="user" placeholder="User Name...">
         <input type="text" id="msg" placeholder="Write Message...">
         <button id="send_msg">Send</button>
@@ -31,11 +31,9 @@
         const user = document.getElementById("user");
         const startChat = document.getElementById("start_chat");
         
-        startChat.onclick = function joinRoom() {
-            socket.emit("join_room", {
-                roomid: startChat.getAttribute("data-roomid")
-            });
-        }
+        socket.emit("join_room", {
+            roomid: startChat.getAttribute("data-roomid")
+        });
 
         btn.onclick = function generateMessage() {
             socket.emit("Send_Msg", {
