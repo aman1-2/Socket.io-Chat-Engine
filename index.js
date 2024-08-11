@@ -14,12 +14,15 @@ const startStopServer = async () => {
     io.on("connection", (socket) => {
         console.log("A new User Connected: ",socket.id);
 
-        socket.on("Send_Msg", (data) => {
-            io.emit("Rcvd_Msg", data);
-        });
     });
 
+    app.set("view engine", "ejs"); //We can set a view engine -> ejs with the help of set method.
+
     app.use('/' , express.static(__dirname + '/public'));
+
+    app.get('/chat/:roomid', (req, res) => {
+        res.render("Index");
+    });
 
     server.listen(PORT, async () => {
         console.log(`Server Started at Port: ${PORT}`);
