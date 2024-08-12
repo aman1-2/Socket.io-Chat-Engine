@@ -30,6 +30,9 @@ const startStopServer = async () => {
             io.to(data.roomid).emit("Rcvd_Msg", data);
         });
 
+        socket.on('typing', (data) => {
+            socket.broadcast.to(data.roomid).emit('someone_typing');
+        })
     });
 
     app.set("view engine", "ejs"); //We can set a view engine -> ejs with the help of set method.
