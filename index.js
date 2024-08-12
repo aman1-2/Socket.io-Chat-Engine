@@ -17,9 +17,7 @@ const startStopServer = async () => {
 
         socket.on("join_room", (data) => {
             console.log("Joined room: ",data.roomid);
-            socket.join(data.roomid, function(){
-                console.log("Joined a room", data.roomid);
-            });
+            socket.join(data.roomid);
         });
 
         socket.on("Send_Msg", async (data) => {
@@ -38,9 +36,11 @@ const startStopServer = async () => {
 
     app.use('/' , express.static(__dirname + '/public'));
 
-    app.get('/chat/:roomid', (req, res) => { //With ejs we can now send the data which we can access in the ejs file.
+    app.get('/chat/:roomid', async (req, res) => { //With ejs we can now send the data which we can access in the ejs file.
+        const chats = await Chat.find({room: req.params.roomid}).select("content user");
         res.render("Index",{
-            id: req.params.roomid
+            id: req.params.roomid,
+            chats: chats
         });
     });
 

@@ -17,7 +17,9 @@
 
     <div>
         <ul id="msg_list">
-
+            <% for(let i=0; i < chats.length; i++) {%>
+                <li><%= `${chats[i].user}: ${chats[i].content}` %></li>
+            <% } %>
         </ul>
     </div>
 
