@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const Socketio = require('socket.io');
+const Chat = require('./models/chat');
 
 const dbConnect = require('./config/dbconfig');
 
@@ -21,8 +22,13 @@ const startStopServer = async () => {
             });
         });
 
-        socket.on("Send_Msg", (data) => {
-            console.log("Message sent: ",data)
+        socket.on("Send_Msg", async (data) => {
+            //Storing the message in DB before emitting it.
+            const chat = Chat.create({
+                content: data.msg,
+                user: data.user,
+                room: data.roomid
+            });
             io.to(data.roomid).emit("Rcvd_Msg", data);
         });
 

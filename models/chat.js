@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const chatSchema = new mongoose({
+const chatSchema = new mongoose.Schema({
     content: {
         type: String
     },
